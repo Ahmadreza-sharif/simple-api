@@ -23,6 +23,7 @@ class EmployeeFactory extends Factory
             'gender' => $gender[rand(0,2)],
             'age' => rand(18,50),
             'city' => $this->faker->city(),
+            'email' => $this->faker->email()
         ];
     }
 }

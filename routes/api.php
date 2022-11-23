@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\api\v1\employeeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,11 +19,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('api/employee')->group(function()
+Route::prefix('v1/')->group(function()
 {
-    Route::get('/all',[employeeController::class,'listEmployees']);
-    Route::get('/single{id}',[employeeController::class,'getSingleEmployee']);
-    Route::post('/create',[employeeController::class,'createEmployee']);
-    Route::delete('/delete/{id}',[employeeController::class,'deleteEmployee']);
-    Route::put('/update/{id}',[employeeController::class,'updateEmployee']);
+    Route::get('/employees',[employeeController::class,'listEmployees']);
+    Route::get('/employees/{id}',[employeeController::class,'getSingleEmployee'])->where(['id' => '[0-9]+']);
+    Route::post('/employees',[employeeController::class,'createEmployee']);
+    Route::delete('/employees/{id}',[employeeController::class,'deleteEmployee']);
+    Route::put('/employees/{id}',[employeeController::class,'updateEmployee']);
 });
