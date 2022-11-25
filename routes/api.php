@@ -41,7 +41,7 @@ Route::prefix('v1/')->group(function () {
 
         Route::post('/create-project',[projectController::class,'createProject']);
         Route::get('/list-project',[projectController::class,'listProject']);
-        Route::get('/single-project/{id}',[projectController::class,'createProject']);
-        Route::get('/delete-project/{id}',[projectController::class,'deleteProject']);
+        Route::get('/single-project/{id}',[projectController::class,'singleProject']);
+        Route::delete('/delete-project/{id}',[projectController::class,'deleteProject']);
     });
 });
