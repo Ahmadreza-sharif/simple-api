@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\api\v1\courseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\v1\employeeController;
 use App\Http\Controllers\api\v1\projectController;
 use App\Http\Controllers\api\v1\studentController;
+use App\Http\Controllers\api\v1\userController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,17 +33,32 @@ Route::prefix('v1/')->group(function () {
         Route::put('/{id}', [employeeController::class, 'updateEmployee']);
     });
 
-    Route::post('/login', [studentController::class,'login']);
-    Route::post('/register', [studentController::class,'register']);
-    
-    Route::group(['middleware' => ["auth:sanctum"]],function () {
+    Route::prefix('sanctum')->group(function () {
+        Route::post('/login', [studentController::class, 'login']);
+        Route::post('/register', [studentController::class, 'register']);
 
-        Route::get('/profile',[studentController::class,'profile']);
-        Route::get('/logout',[studentController::class,'logout']);
+        Route::group(['middleware' => ["auth:sanctum"]], function () {
 
-        Route::post('/create-project',[projectController::class,'createProject']);
-        Route::get('/list-project',[projectController::class,'listProject']);
-        Route::get('/single-project/{id}',[projectController::class,'singleProject']);
-        Route::delete('/delete-project/{id}',[projectController::class,'deleteProject']);
+            Route::get('/profile', [studentController::class, 'profile']);
+            Route::get('/logout', [studentController::class, 'logout']);
+
+            Route::post('/create-project', [projectController::class, 'createProject']);
+            Route::get('/list-project', [projectController::class, 'listProject']);
+            Route::get('/single-project/{id}', [projectController::class, 'singleProject']);
+            Route::delete('/delete-project/{id}', [projectController::class, 'deleteProject']);
+        });
+    });
+
+    Route::prefix('jwt')->group(function () {
+        Route::post('/login',[userController::class,'login']);
+        Route::post('/register',[userController::class,'register']);
+        
+        Route::group(['middleware' => ['auth:api']],function () {
+            Route::post('/create', [courseController::class,'courseEnrollment']);
+            Route::get('/profile', [userController::class,'profile']);
+            Route::get('/logout', [userController::class,'logout']);
+            Route::get('/total', [courseController::class,'total']);
+            Route::delete('/delete/{id}', [courseController::class,'deleteCourse']);
+        });
     });
 });
