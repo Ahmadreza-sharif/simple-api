@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\api\v1\authorController;
+use App\Http\Controllers\api\v1\bookController;
 use App\Http\Controllers\api\v1\courseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -59,6 +61,19 @@ Route::prefix('v1/')->group(function () {
             Route::get('/logout', [userController::class,'logout']);
             Route::get('/total', [courseController::class,'total']);
             Route::delete('/delete/{id}', [courseController::class,'deleteCourse']);
+        });
+    });
+
+    Route::prefix('passport')->group(function () {
+        Route::post('/login',[authorController::class,'login']);
+        Route::post('/register',[authorController::class,'register']);
+        
+        Route::group(['middleware' => ['auth:api']],function () {
+            Route::post('/create', [bookController::class,'create']);
+            Route::get('/list', [bookController::class,'list']);
+            Route::get('/single/{id}', [bookController::class,'single']);
+            Route::post('/update/{id}', [bookController::class,'update']);
+            Route::delete('/delete', [bookController::class,'delete']); 
         });
     });
 });
